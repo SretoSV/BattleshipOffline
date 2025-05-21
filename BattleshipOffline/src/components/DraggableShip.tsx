@@ -43,7 +43,6 @@ export default function DraggableShip({ ship, setShips }: DraggableShipProps) {
             opacity: isDragging ? 0.5 : 1,
             display: "flex",
             flexDirection: ship.orientation === "horizontal" ? "row" : "column",
-            gap: "2px",
             cursor: "grab",
             marginBottom: "10px",
         }}
@@ -58,8 +57,8 @@ export default function DraggableShip({ ship, setShips }: DraggableShipProps) {
             }}
             onMouseDown={() => setClickedIndex(idx)}
             style={{
-                width: 30,
-                height: 30,
+                width: 41,
+                height: 41,
                 backgroundColor: "gray",
                 border: "1px solid black",
             }}

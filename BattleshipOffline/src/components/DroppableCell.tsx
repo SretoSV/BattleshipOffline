@@ -1,6 +1,7 @@
 import { useDrop } from "react-dnd";
 import type { Ship } from "../types/ShipTypes";
 import type { Cell } from "../types/CellTypes";
+import play1Image from '../images/play1.png';
 
 interface DroppableCellProps {
     row: number;
@@ -8,6 +9,7 @@ interface DroppableCellProps {
     onDropShip: (row: number, col: number, ship: Ship) => void;
     children?: React.ReactNode;
     board?: Cell[][]; // Dodaj board kao prop da možemo proveriti stanje
+    boardName: string; 
 }
 
 const DroppableCell: React.FC<DroppableCellProps> = ({
@@ -16,6 +18,7 @@ const DroppableCell: React.FC<DroppableCellProps> = ({
     onDropShip,
     children,
     board, // primamo board
+    boardName,
 }) => {
   const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: "SHIP",
@@ -51,10 +54,10 @@ const DroppableCell: React.FC<DroppableCellProps> = ({
             if (node) drop(node);
         }}
         style={{
-            width: 30,
-            height: 30,
-            border: "1px solid black",
-            backgroundColor: isOver ? "#aaf" : "#cce",
+            width: 42,
+            height: 42,
+            border: "2px solid #1b4f74",
+            backgroundColor: isOver ? boardName === "board1" ? "#2488cf" : "red" : "#EFEFEF",
         }}
     >
         {children}

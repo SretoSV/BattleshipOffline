@@ -197,27 +197,25 @@ export default function HitBoard(props:HitBoardProps){
 
     return (
         <div className={styles.boardDiv}>
-            <div>{props.boardName}</div>
-            <div className={styles.table}>
-                {Array.from({ length: 10 }, (_, i) => {
-                    return <div key={i} className={styles.number}>
-                    {i}
-                    </div>
-                })}
+            <div className={`${props.boardName === "board3" ? styles.player1 : styles.player2} `}>
+              <b>
+                {props.boardName === "board3" ? "Player 1" : "Player2"}
+              </b>
             </div>
+
             <div className={styles.board}>
             {props.board.map((row, rowIndex) =>
                 row.map((cell, colIndex) => (
                 !cell.isHit ? 
                 <div
                     key={`${rowIndex}-${colIndex}`}
-                    className={`${styles.cell} ${cell.hasShip ? styles.ship : ""} ${cell.isHit ? styles.hit : ""}`}
+                    className={`${styles.cell} ${styles.draggableCellStyle} ${cell.hasShip ? props.boardName === "board3" ? styles.ship1 : styles.ship2 : ""} ${cell.isHit ? styles.hit : ""}`}
                     onClick={() => handleClick?.(rowIndex, colIndex)}
                 />
                 :
                 <div
                     key={`${rowIndex}-${colIndex}`}
-                    className={`${styles.cellHitted} ${cell.hasShip ? styles.ship : ""} ${cell.isHit ? styles.hit : ""}`}
+                    className={`${styles.cellHitted} ${styles.draggableCellStyle} ${cell.hasShip ? props.boardName === "board3" ? styles.ship1 : styles.ship2 : ""} ${cell.isHit ? styles.hit : ""}`}
                 />
                 ))
             )}

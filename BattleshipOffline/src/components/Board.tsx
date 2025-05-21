@@ -12,7 +12,7 @@ interface BoardProps {
   boardName: string;
   setBoard: Dispatch<SetStateAction<Cell[][]>>;
   onSendShipLength: (length: number) => void;
-}
+};
 
 const initialShips: Ship[] = [
   { id: 1, size: 4, orientation: "horizontal", hitCounter: 0 },
@@ -40,7 +40,6 @@ export default function Board(props:BoardProps){
     const [remove, setRemove] = useState<boolean>(false);
 
     const placeShip = (row: number, col: number, ship: Ship & { clickedIndex?: number }) => {
-      
       
       const index = ship.clickedIndex ?? 0;
       console.log(index);
@@ -345,22 +344,16 @@ export default function Board(props:BoardProps){
 
   return (
     <>
-      <div className={styles.shipDiv}>
-        <h2>Brodovi</h2>
-        {ships.map((ship) => (
-          <DraggableShip key={ship.id} ship={ship} setShips={setShips}/>
-        ))}
-      </div>
     
     <div className={styles.boardDiv}>
-      <div>{props.boardName}</div>
-      <div className={styles.table}>
-          {Array.from({ length: 10 }, (_, i) => {
-            return <div key={i} className={styles.number}>
-              {i}
-            </div>
-          })}
+
+      <div className={`${props.boardName === "board1" ? styles.player1 : styles.player2} `}>
+        <b>
+          {props.boardName === "board1" ? "Player 1" : "Player2"}
+        </b>
       </div>
+
+
       <div className={styles.board}>
         {props.board.map((row, rowIndex) =>
           row.map((cell, colIndex) => (
@@ -371,11 +364,12 @@ export default function Board(props:BoardProps){
                   col={colIndex}
                   onDropShip={placeShip}
                   board={props.board}
+                  boardName={props.boardName}
                 >
                     { cell.hasShip ?
                     <div
                       key={`${rowIndex}-${colIndex}`}
-                      className={`${styles.cell} ${cell.hasShip ? styles.ship : ""} `}
+                      className={`${styles.cell} ${cell.hasShip ? props.boardName === "board1" ? styles.ship1 : styles.ship2 : ""} `}
                       onClick={() => handleRemove(cell.shipId)}
                       title="Click To Remove"
                     /> 
@@ -391,7 +385,20 @@ export default function Board(props:BoardProps){
           ))
         )}
       </div>
+
     </div>
+
+
+    <div className={styles.shipDiv}>
+      <h2>Ships</h2>
+      {ships.map((ship) => (
+        <DraggableShip key={ship.id} ship={ship} setShips={setShips}/>
+      ))}
+    </div>
+
+
+
+
     </>
   );
 };
