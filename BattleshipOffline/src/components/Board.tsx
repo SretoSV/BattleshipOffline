@@ -4,6 +4,9 @@ import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import DraggableShip from "../components/DraggableShip";
 import type { Cell } from '../types/CellTypes';
 import type { Ship } from '../types/ShipTypes';
+import { initialShips } from '../constants/ships';
+import { removeRemainingShipPartsFromBoard, removeShipFromBoardOnClick } from '../functions/removeShip';
+import { addNextToShip, removeNextToShip } from '../functions/nextToShipFunctions';
 
 interface BoardProps {
   board: Cell[][];
@@ -11,20 +14,6 @@ interface BoardProps {
   setBoard: Dispatch<SetStateAction<Cell[][]>>;
   onSendShipLength: (length: number) => void;
 };
-
-const initialShips: Ship[] = [
-  { id: 1, size: 4, orientation: "horizontal", hitCounter: 0 },
-  { id: 2, size: 3, orientation: "horizontal", hitCounter: 0 },
-  { id: 3, size: 3, orientation: "horizontal", hitCounter: 0 },
-  { id: 4, size: 2, orientation: "horizontal", hitCounter: 0 },
-  { id: 5, size: 2, orientation: "horizontal", hitCounter: 0 },
-  { id: 6, size: 2, orientation: "horizontal", hitCounter: 0 },
-  { id: 7, size: 1, orientation: "horizontal", hitCounter: 0},
-  { id: 8, size: 1, orientation: "horizontal", hitCounter: 0 },
-  { id: 9, size: 1, orientation: "horizontal", hitCounter: 0 },
-  { id: 10, size: 1, orientation: "horizontal", hitCounter: 0 },
-  
-];
 
 export default function Board(props:BoardProps){
     
@@ -34,25 +23,21 @@ export default function Board(props:BoardProps){
     const [numOfcurrentShip, setNumOfCurrentShip] = useState<number>(0);
     const [checkBoard, setCheckBoard] = useState<boolean>(false);
     const [nextToShip, setNextToShip] = useState<boolean>(false);
-    const [nextToShip2, setNextToShip2] = useState<boolean>(false);
     const [remove, setRemove] = useState<boolean>(false);
 
     const placeShip = (row: number, col: number, ship: Ship & { clickedIndex?: number }) => {
       
       const index = ship.clickedIndex ?? 0;
-      console.log(index);
+      
       if((ship.orientation === "horizontal" && col - index >= 0 )  //ako brod ode izvan granica da se ne baci gresku nepostojeceg index-a
         || (ship.orientation === "vertical" && row - index >= 0 )){
+          
         // koriguj poziciju da se uvek postavi brod od index 0
-        if (ship.orientation === "horizontal") {
-          col = col - index; //oduzmi od kolone index da bi se gledalo od pocetnog index-a
-        } else {
-          row = row - index;
-        }
+        ship.orientation === "horizontal" ? col = col - index : row = row - index; //oduzmi od kolone index da bi se gledalo od pocetnog index-a
 
         setCurrentShipId(ship.id);
         setCurrentShipSize(ship.size);
-        //console.log(row + " : " + col);
+        
         const canPlace =
           ship.orientation === "horizontal"
             ? col + ship.size <= 10
@@ -62,7 +47,6 @@ export default function Board(props:BoardProps){
     
         props.setBoard(prev => {
           if (prev[row][col].hasShip || prev[row][col].shipNextTo) {
-            console.log("Već postoji brod ovde!"); 
             return prev; // Ne menjaj ništa
           }
 
@@ -89,27 +73,8 @@ export default function Board(props:BoardProps){
     };
 
     useEffect(() => {
-      console.log(`props.board ${props.boardName} changed!`, props.board);
-      console.log("SHIP Id: " + currentShipId);
-      console.log("SHIP SIZE: " + currentShipSize);
-      console.log("NUM: " + numOfcurrentShip);
-      
       if(currentShipSize > numOfcurrentShip){
-        props.setBoard(prev => {
-          return prev.map((r) =>
-            r.map((c) => {
-              const isShip =
-                (c.hasShip && c.shipId === currentShipId)
-                  ? true
-                  : false;
-    
-                return isShip
-                  ? { ...c, hasShip: false, shipId: 0 }
-                  : c;
-              })
-            )
-          }
-        );
+        removeRemainingShipPartsFromBoard(props.setBoard, currentShipId);
       }
       else{
         //ako nisam uklanjao ostatak broda, onda uklanjam ship iz niza i prelazim na dodavanje polja oko ship-a
@@ -123,239 +88,23 @@ export default function Board(props:BoardProps){
 
     //Next To Ship
     useEffect(() => {
-      props.setBoard(prev => {
-        return prev.map((r, rIdx) =>
-          r.map((c, cIdx) => {
-              if(rIdx === 0 && cIdx === 0){ //ugao1
-                if((prev[rIdx][cIdx+1].hasShip || prev[rIdx+1][cIdx].hasShip || prev[rIdx+1][cIdx+1].hasShip) && !c.hasShip){
-                  return {...c, shipNextTo: true }
-                }
-              }
-              else if(rIdx === 0 && cIdx === 9){ //ugao2
-                if((prev[rIdx][cIdx-1].hasShip || prev[rIdx+1][cIdx-1].hasShip || prev[rIdx+1][cIdx].hasShip) && !c.hasShip){
-                  return {...c, shipNextTo: true }
-                }
-              }
-              else if(rIdx === 9 && cIdx === 0){ //ugao3
-                if((prev[rIdx-1][cIdx].hasShip || prev[rIdx-1][cIdx+1].hasShip || prev[rIdx][cIdx+1].hasShip) && !c.hasShip){
-                  return {...c, shipNextTo: true }
-                }
-              }
-              else if(rIdx === 9 && cIdx === 9){ //ugao4
-                if((prev[rIdx][cIdx-1].hasShip || prev[rIdx-1][cIdx-1].hasShip || prev[rIdx-1][cIdx].hasShip) && !c.hasShip){
-                  return {...c, shipNextTo: true }
-                }
-              }
-              else if(rIdx === 0 && (cIdx >= 1 && cIdx <= 8)){ //prvi red
-                if((prev[rIdx][cIdx-1].hasShip || 
-                   prev[rIdx+1][cIdx-1].hasShip || 
-                   prev[rIdx][cIdx+1].hasShip ||
-                   prev[rIdx+1][cIdx].hasShip ||
-                   prev[rIdx+1][cIdx+1].hasShip) && !c.hasShip
-                ){
-                  return {...c, shipNextTo: true }
-                }
-              }
-              else if(rIdx === 9 && (cIdx >= 1 && cIdx <= 8)){ //poslednji red
-                if((prev[rIdx][cIdx-1].hasShip || 
-                   prev[rIdx-1][cIdx-1].hasShip || 
-                   prev[rIdx][cIdx+1].hasShip ||
-                   prev[rIdx-1][cIdx].hasShip ||
-                   prev[rIdx-1][cIdx+1].hasShip) && !c.hasShip
-                ){
-                  return {...c, shipNextTo: true }
-                }
-              }
-              else if(cIdx === 0 && (rIdx >= 1 && rIdx <= 8)){ //prva kolona
-                if((prev[rIdx-1][cIdx].hasShip || 
-                   prev[rIdx-1][cIdx+1].hasShip || 
-                   prev[rIdx][cIdx+1].hasShip ||
-                   prev[rIdx+1][cIdx].hasShip ||
-                   prev[rIdx+1][cIdx+1].hasShip) && !c.hasShip
-                ){
-                  return {...c, shipNextTo: true }
-                }
-              }
-              else if(cIdx === 9 && (rIdx >= 1 && rIdx <= 8)){ //poslednja kolona
-                if((prev[rIdx-1][cIdx].hasShip || 
-                   prev[rIdx-1][cIdx-1].hasShip || 
-                   prev[rIdx][cIdx-1].hasShip ||
-                   prev[rIdx+1][cIdx-1].hasShip ||
-                   prev[rIdx+1][cIdx].hasShip) && !c.hasShip
-                ){
-                  return {...c, shipNextTo: true }
-                }
-              }
-              else if(rIdx >=1 && cIdx >=1 && rIdx <=8 && cIdx <= 8){
-                if((prev[rIdx-1][cIdx-1].hasShip ||
-                   prev[rIdx-1][cIdx].hasShip || 
-                   prev[rIdx-1][cIdx+1].hasShip || 
-                   prev[rIdx][cIdx-1].hasShip || 
-                   prev[rIdx][cIdx+1].hasShip ||
-                   prev[rIdx+1][cIdx-1].hasShip || 
-                   prev[rIdx+1][cIdx].hasShip || 
-                   prev[rIdx+1][cIdx+1].hasShip) && !c.hasShip) //!c.hasShip da ne bi polje sa brodom imalo shipNextTo: true
-                   {
-                    return {...c, shipNextTo: true }
-                   }
-              }
-
-              return c;
-            })
-          )
-        }
-      );
-      setNextToShip2(current => !current);
+      addNextToShip(props.setBoard);
     }, [nextToShip]);
-
-    useEffect(() => {
-      console.log(`!!!props.board ${props.boardName} changed!`, props.board);
-    }, [nextToShip2]);
-
-    const handleRemove = (shipId: number | undefined) => {
-      console.log(shipId);
-      props.setBoard(prev => {
-            return prev.map((r) =>
-              r.map((c) => {
-                const isShip =
-                (c.hasShip && c.shipId === shipId)
-                  ? true
-                  : false;
-    
-                return isShip
-                  ? { ...c, hasShip: false, shipId: 0 }
-                  : c;
-                
-              })
-            )
-          }
-      );
-      handleAddShipAgainToString(shipId);
-      setRemove(current => !current);
-      if(ships.length === 0 || ships.length === 1){
-        props.onSendShipLength(2); 
-      }
-      else{
-        props.onSendShipLength(ships.length);
-      }
-    };
 
     //remove Next To Ship
     useEffect(() => {
-      props.setBoard(prev => {
-        return prev.map((r, rIdx) =>
-          r.map((c, cIdx) => {
-              if(rIdx === 0 && cIdx === 0){ //ugao1
-                if((!prev[rIdx][cIdx+1].hasShip && !prev[rIdx+1][cIdx].hasShip && !prev[rIdx+1][cIdx+1].hasShip) && !c.hasShip){
-                  return {...c, shipNextTo: false }
-                }
-              }
-              else if(rIdx === 0 && cIdx === 9){ //ugao2
-                if((!prev[rIdx][cIdx-1].hasShip && !prev[rIdx+1][cIdx-1].hasShip && !prev[rIdx+1][cIdx].hasShip) && !c.hasShip){
-                  return {...c, shipNextTo: false }
-                }
-              }
-              else if(rIdx === 9 && cIdx === 0){ //ugao3
-                if((!prev[rIdx-1][cIdx].hasShip && !prev[rIdx-1][cIdx+1].hasShip && !prev[rIdx][cIdx+1].hasShip) && !c.hasShip){
-                  return {...c, shipNextTo: false }
-                }
-              }
-              else if(rIdx === 9 && cIdx === 9){ //ugao4
-                if((!prev[rIdx][cIdx-1].hasShip && !prev[rIdx-1][cIdx-1].hasShip && !prev[rIdx-1][cIdx].hasShip) && !c.hasShip){
-                  return {...c, shipNextTo: false }
-                }
-              }
-              else if(rIdx === 0 && (cIdx >= 1 && cIdx <= 8)){ //prvi red
-                if((!prev[rIdx][cIdx-1].hasShip && 
-                   !prev[rIdx+1][cIdx-1].hasShip && 
-                   !prev[rIdx][cIdx+1].hasShip && 
-                   !prev[rIdx+1][cIdx].hasShip && 
-                   !prev[rIdx+1][cIdx+1].hasShip) && !c.hasShip
-                ){
-                  return {...c, shipNextTo: false }
-                }
-              }
-              else if(rIdx === 9 && (cIdx >= 1 && cIdx <= 8)){ //poslednji red
-                if((!prev[rIdx][cIdx-1].hasShip && 
-                   !prev[rIdx-1][cIdx-1].hasShip && 
-                   !prev[rIdx][cIdx+1].hasShip && 
-                   !prev[rIdx-1][cIdx].hasShip && 
-                   !prev[rIdx-1][cIdx+1].hasShip) && !c.hasShip
-                ){
-                  return {...c, shipNextTo: false }
-                }
-              }
-              else if(cIdx === 0 && (rIdx >= 1 && rIdx <= 8)){ //prva kolona
-                if((!prev[rIdx-1][cIdx].hasShip && 
-                   !prev[rIdx-1][cIdx+1].hasShip && 
-                   !prev[rIdx][cIdx+1].hasShip && 
-                   !prev[rIdx+1][cIdx].hasShip && 
-                   !prev[rIdx+1][cIdx+1].hasShip) && !c.hasShip
-                ){
-                  return {...c, shipNextTo: false }
-                }
-              }
-              else if(cIdx === 9 && (rIdx >= 1 && rIdx <= 8)){ //poslednja kolona
-                if((!prev[rIdx-1][cIdx].hasShip && 
-                   !prev[rIdx-1][cIdx-1].hasShip && 
-                   !prev[rIdx][cIdx-1].hasShip && 
-                   !prev[rIdx+1][cIdx-1].hasShip && 
-                   !prev[rIdx+1][cIdx].hasShip) && !c.hasShip
-                ){
-                  return {...c, shipNextTo: false }
-                }
-              }
-              else if(rIdx >=1 && cIdx >=1 && rIdx <=8 && cIdx <= 8){
-                if((!prev[rIdx-1][cIdx-1].hasShip && 
-                   !prev[rIdx-1][cIdx].hasShip && 
-                   !prev[rIdx-1][cIdx+1].hasShip && 
-                   !prev[rIdx][cIdx-1].hasShip && 
-                   !prev[rIdx][cIdx+1].hasShip && 
-                   !prev[rIdx+1][cIdx-1].hasShip && 
-                   !prev[rIdx+1][cIdx].hasShip && 
-                   !prev[rIdx+1][cIdx+1].hasShip) && !c.hasShip) //!c.hasShip da ne bi polje sa brodom imalo shipNextTo: true
-                   {
-                    return {...c, shipNextTo: false }
-                   }
-              }
-
-              return c;
-            })
-          )
-        }
-      );
-      setNextToShip2(current => !current);
+      removeNextToShip(props.setBoard);
     }, [remove]);
-
-    const handleAddShipAgainToString = (shipId: number | undefined) => {
-      if (shipId === undefined) return;
-      
-      const shipToRestore = initialShips.find(ship => ship.id === shipId);
-      if (!shipToRestore) return;
-      
-      setShips(prevShips => {
-        const alreadyExists = prevShips.some(ship => ship.id === shipId);
-        if (alreadyExists) {
-          return prevShips;
-        }
-
-        const updated = [...prevShips, shipToRestore].sort((a, b) => b.size - a.size);
-        console.log("Updated ships:", updated);
-        return updated;
-      });
-    };
 
   return (
     <>
     
     <div className={styles.boardDiv}>
-
       <div className={`${props.boardName === "board1" ? styles.player1 : styles.player2} `}>
         <b>
           {props.boardName === "board1" ? "Player 1" : "Player2"}
         </b>
       </div>
-
 
       <div className={styles.board}>
         {props.board.map((row, rowIndex) =>
@@ -373,7 +122,18 @@ export default function Board(props:BoardProps){
                     <div
                       key={`${rowIndex}-${colIndex}`}
                       className={`${styles.cell} ${cell.hasShip ? props.boardName === "board1" ? styles.ship1 : styles.ship2 : ""} `}
-                      onClick={() => handleRemove(cell.shipId)}
+                      onClick={() => {
+                        removeShipFromBoardOnClick(
+                          props.onSendShipLength,
+                          ships,
+                          props.setBoard,
+                          setShips,
+                          
+                          cell.shipId
+                        )
+                        setRemove(current => !current);
+                      }
+                      }
                       title="Click To Remove"
                     /> 
                       :
@@ -391,16 +151,12 @@ export default function Board(props:BoardProps){
 
     </div>
 
-
     <div className={styles.shipDiv}>
       <h2 className={`${props.boardName === "board1" ? styles.shipsHead1 : styles.shipsHead2} `}>Ships</h2>
       {ships.map((ship) => (
         <DraggableShip key={ship.id} ship={ship} setShips={setShips} boardName={props.boardName}/>
       ))}
     </div>
-
-
-
 
     </>
   );

@@ -1,8 +1,6 @@
 import { useDrag } from "react-dnd";
 import type { Ship } from "../types/ShipTypes";
 import { useState, type Dispatch, type SetStateAction } from "react";
-import play1Image from '../images/play1.png';
-import styles from '../styles/BattleshipStyle.module.css';
 
 interface DraggableShipProps {
   ship: Ship;

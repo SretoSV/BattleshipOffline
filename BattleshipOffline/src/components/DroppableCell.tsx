@@ -19,7 +19,7 @@ const DroppableCell: React.FC<DroppableCellProps> = ({
     board, // primamo board
     boardName,
 }) => {
-  const [{ isOver, canDrop }, drop] = useDrop(() => ({
+  const [{ isOver }, drop] = useDrop(() => ({
     accept: "SHIP",
     drop: (item: Ship & { clickedIndex: number }) => {
         // ➕ Provera da li polja na koje želimo da postavimo brod imaju `hasShip: true`
