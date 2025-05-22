@@ -1,7 +1,6 @@
 import { useDrop } from "react-dnd";
 import type { Ship } from "../types/ShipTypes";
 import type { Cell } from "../types/CellTypes";
-import play1Image from '../images/play1.png';
 
 interface DroppableCellProps {
     row: number;

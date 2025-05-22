@@ -1,13 +1,16 @@
 import { useDrag } from "react-dnd";
 import type { Ship } from "../types/ShipTypes";
 import { useState, type Dispatch, type SetStateAction } from "react";
+import play1Image from '../images/play1.png';
+import styles from '../styles/BattleshipStyle.module.css';
 
 interface DraggableShipProps {
   ship: Ship;
   setShips: Dispatch<SetStateAction<Ship[]>>;
+  boardName: string;
 }
 
-export default function DraggableShip({ ship, setShips }: DraggableShipProps) {
+export default function DraggableShip({ ship, setShips, boardName }: DraggableShipProps) {
   const [clickedIndex, setClickedIndex] = useState(0);
 
   const [{ isDragging }, drag, preview] = useDrag({
@@ -48,20 +51,38 @@ export default function DraggableShip({ ship, setShips }: DraggableShipProps) {
         }}
     >
         {Array.from({ length: ship.size }).map((_, idx) => (
+            boardName === "board1" ? 
             <div
-            key={idx}
-            ref={(node) => {
-                if (idx === clickedIndex && node) {
-                drag(node);
-                }
-            }}
-            onMouseDown={() => setClickedIndex(idx)}
-            style={{
-                width: 41,
-                height: 41,
-                backgroundColor: "gray",
-                border: "1px solid black",
-            }}
+              key={idx}
+              ref={(node) => {
+                  if (idx === clickedIndex && node) {
+                  drag(node);
+                  }
+              }}
+              onMouseDown={() => setClickedIndex(idx)}
+              style={{
+                  width: 41,
+                  height: 41,
+                  backgroundColor: "#2488cf",
+                  /*backgroundImage: `url(${play1Image})`,*/
+                  border: "1px solid black",
+              }}
+            />
+            :
+            <div
+              key={idx}
+              ref={(node) => {
+                  if (idx === clickedIndex && node) {
+                  drag(node);
+                  }
+              }}
+              onMouseDown={() => setClickedIndex(idx)}
+              style={{
+                  width: 41,
+                  height: 41,
+                  backgroundColor: "red",
+                  border: "1px solid black",
+              }}
             />
         ))}
     </div>

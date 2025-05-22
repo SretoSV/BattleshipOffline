@@ -54,7 +54,14 @@
 .shipDiv{
   margin-left: 20px;
 }
-
+.shipsHead1{
+  color: #2488cf;
+  font-size: 20px;
+}
+.shipsHead2{
+  color: red;
+  font-size: 20px;
+}
 .cell.next{
   /*background-color: red;*/
   background-image: url(../images/cellBack.png);
@@ -64,7 +71,14 @@
   margin-top: 100px;
 }
 
-
+.shipSkin{
+  width: 41;
+  height: 41;
+  background-color: "#2488cf";
+  /*backgroundImage: `url(${play1Image})`,*/
+  border: 1px solid black;
+}
+            
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -80,14 +94,24 @@
 
 .modal {
   background-color: white;
-  color: black;
   padding: 2rem;
   border-radius: 8px;
-  max-width: 500px;
+  max-width: 300px;
   width: 100%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-
+.modalBack1{
+  border: 5px solid #2488cf;
+  color: #2488cf;
+}
+.modalBack2{
+  border: 5px solid red;
+  color: red;
+}
 .board3And4Div{
   display: flex;
   flex-direction: row;
@@ -120,3 +144,40 @@
     font-size: 90px;
     color: #2488cf;
 }
+
+.rulesDiv1{
+  background-color: #2488cf;
+  font-size: 20px;
+  padding: 20px;
+  border: 5px  solid white;
+  border-radius: 40px;
+}
+
+.rulesDiv2{
+  background-color: red;
+  font-size: 20px;
+  padding: 20px;
+  border: 5px  solid white;
+  border-radius: 40px;
+}
+
+.readyButton1{
+  color: white;
+  background-color: #2488cf;
+  border: 2px solid white;
+  padding: 10px;
+  border-radius: 20px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.readyButton2{
+  color: white;
+  background-color: red;
+  border: 2px solid white;
+  padding: 10px;
+  border-radius: 20px;
+  font-size: 20px;
+  cursor: pointer;
+}
+

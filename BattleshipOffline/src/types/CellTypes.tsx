@@ -3,5 +3,4 @@ export type Cell = {
   isHit: boolean;
   shipNextTo: boolean;
   shipId?: number; // za identifikaciju broda
-  shipNextToId?: number; // za identifikaciju broda
 };

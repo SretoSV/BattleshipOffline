@@ -1,7 +1,5 @@
-
 import styles from '../styles/BattleshipStyle.module.css';
 import DroppableCell from "../components/DroppableCell";
-
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import DraggableShip from "../components/DraggableShip";
 import type { Cell } from '../types/CellTypes';
@@ -234,7 +232,12 @@ export default function Board(props:BoardProps){
       );
       handleAddShipAgainToString(shipId);
       setRemove(current => !current);
-      props.onSendShipLength(ships.length);
+      if(ships.length === 0 || ships.length === 1){
+        props.onSendShipLength(2); 
+      }
+      else{
+        props.onSendShipLength(ships.length);
+      }
     };
 
     //remove Next To Ship
@@ -390,9 +393,9 @@ export default function Board(props:BoardProps){
 
 
     <div className={styles.shipDiv}>
-      <h2>Ships</h2>
+      <h2 className={`${props.boardName === "board1" ? styles.shipsHead1 : styles.shipsHead2} `}>Ships</h2>
       {ships.map((ship) => (
-        <DraggableShip key={ship.id} ship={ship} setShips={setShips}/>
+        <DraggableShip key={ship.id} ship={ship} setShips={setShips} boardName={props.boardName}/>
       ))}
     </div>
 

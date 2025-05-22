@@ -199,7 +199,7 @@ export default function HitBoard(props:HitBoardProps){
         <div className={styles.boardDiv}>
             <div className={`${props.boardName === "board3" ? styles.player1 : styles.player2} `}>
               <b>
-                {props.boardName === "board3" ? "Player 1" : "Player2"}
+                {props.boardName === "board3" ? "Player 1" : "Player 2"}
               </b>
             </div>
 
