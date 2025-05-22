@@ -14,10 +14,10 @@ interface GameProps{
     board4: Cell[][];
     setBoard3: Dispatch<SetStateAction<Cell[][]>>;
     setBoard4: Dispatch<SetStateAction<Cell[][]>>;
-    onCheckNumberOfHittedShips: (boardName: string) => void;
+    onSetNumberOfHittedShips: (boardName: string) => void;
 }
 
-export function Game({counter, setCounter, board1, board2, board3, board4, setBoard3, setBoard4, onCheckNumberOfHittedShips}: GameProps){
+export function Game({counter, setCounter, board1, board2, board3, board4, setBoard3, setBoard4, onSetNumberOfHittedShips}: GameProps){
   return (
     <div className={styles.board3And4Div}>
         <div style={{ pointerEvents: counter % 2 === 0 ? 'none' : 'auto' }}>
@@ -26,7 +26,7 @@ export function Game({counter, setCounter, board1, board2, board3, board4, setBo
                 boardCheck={board1} 
                 setBoard={setBoard3} 
                 boardName={"board3"} 
-                onCheckNumberOfHittedShips={onCheckNumberOfHittedShips}
+                onSetNumberOfHittedShips={onSetNumberOfHittedShips}
                 onCount={(number: number) => setCounter(current => current + number)}
             />
         </div>
@@ -43,7 +43,7 @@ export function Game({counter, setCounter, board1, board2, board3, board4, setBo
                 boardCheck={board2} 
                 setBoard={setBoard4} 
                 boardName={"board4"} 
-                onCheckNumberOfHittedShips={onCheckNumberOfHittedShips}
+                onSetNumberOfHittedShips={onSetNumberOfHittedShips}
                 onCount={(number: number) => setCounter(current => current + number)}
 
             />

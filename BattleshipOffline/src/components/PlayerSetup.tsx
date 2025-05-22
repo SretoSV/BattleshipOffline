@@ -5,8 +5,8 @@ import type { Cell } from '../types/CellTypes';
 
 
 interface PlayerSetupProps{
-    userReadyButtonVisibility: boolean,
-    setUserReady: Dispatch<SetStateAction<boolean>>;
+    playerReadyButtonVisibility: boolean,
+    setPlayerReady: Dispatch<SetStateAction<boolean>>;
     setBoard: Dispatch<SetStateAction<Cell[][]>>;
     onSendShipLength: (length: number) => void;
     board: Cell[][];
@@ -14,7 +14,7 @@ interface PlayerSetupProps{
     setStarted?: Dispatch<SetStateAction<boolean>>;
 }
 
-export function PlayerSetup({userReadyButtonVisibility, setUserReady, setBoard, onSendShipLength, board, boardName, setStarted}: PlayerSetupProps){
+export function PlayerSetup({playerReadyButtonVisibility, setPlayerReady, setBoard, onSendShipLength, board, boardName, setStarted}: PlayerSetupProps){
   return (
     <>
         <div className={boardName === "board1" ? styles.rulesDiv1 : styles.rulesDiv2}>
@@ -25,8 +25,8 @@ export function PlayerSetup({userReadyButtonVisibility, setUserReady, setBoard, 
             <Board board={board} boardName={boardName} setBoard={setBoard} onSendShipLength={onSendShipLength}/>
         </div>
 
-        {userReadyButtonVisibility && 
-            <button className={boardName === "board1" ? styles.readyButton1 : styles.readyButton2} onClick={() => {setUserReady(true); setStarted && setStarted(true);}}>{boardName === "board1" ? "Ready => Player2" : "Start"}</button>
+        {playerReadyButtonVisibility && 
+            <button className={boardName === "board1" ? styles.readyButton1 : styles.readyButton2} onClick={() => {setPlayerReady(true); setStarted && setStarted(true);}}>{boardName === "board1" ? "Ready => Player2" : "Start"}</button>
         }
     </>
   )

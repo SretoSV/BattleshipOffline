@@ -2,11 +2,11 @@ import { useState } from "react";
 import styles from '../styles/BattleshipStyle.module.css';
 import Start from "../components/Start";
 import { useBorads } from "../hooks/useBorads";
-import { useUsers } from "../hooks/useUsers";
 import { WinnerModal } from "../components/WinnerModal";
 import { resetBoard } from "../functions/resetBoard";
 import { Game } from "../components/Game";
 import { PlayerSetup } from "../components/PlayerSetup";
+import { usePlayer } from "../hooks/usePlayer";
 
 export function Battleship(){
     const [play, setPlay] = useState<boolean>(false);
@@ -14,24 +14,32 @@ export function Battleship(){
     const [counter, setCounter] = useState<number>(0);
 
     const {board1, board2, board3, board4, setBoard1, setBoard2, setBoard3, setBoard4} = useBorads();
-    const {user1Ready, user2Ready, player1HitCounter, player2HitCounter, user1ReadyButtonVisibility, user2ReadyButtonVisibility,
-           setUser1Ready, setUser2Ready, setPlayer1HitCounter, setPlayer2HitCounter, setUser1ReadyButtonVisibility, setUser2ReadyButtonVisibility,
-           handleSendShipLength1, handleSendShipLength2, handleCheckNumberOfHittedShips} = useUsers();
+    const player1 = usePlayer();
+    const player2 = usePlayer();
 
     const handleResetGame = () => {
         setPlay(false);
         setStarted(false);
-        setUser1Ready(false);
-        setUser2Ready(false);
-        setPlayer1HitCounter(0);
-        setPlayer2HitCounter(0);
-        setUser1ReadyButtonVisibility(false);
-        setUser2ReadyButtonVisibility(false);
+        player1.setPlayerReady(false);
+        player2.setPlayerReady(false);
+        player1.setPlayerHitCounter(0);
+        player2.setPlayerHitCounter(0);
+        player1.setPlayerReadyButtonVisibility(false);
+        player2.setPlayerReadyButtonVisibility(false);
         setCounter(0);
         resetBoard(setBoard1);
         resetBoard(setBoard2);
         resetBoard(setBoard3);
         resetBoard(setBoard4);
+    }
+
+    const handleSetNumberOfHittedShips = (boardName: string) => {
+        if(boardName === "board3"){
+            player2.setPlayerHitCounter(current => current + 1);
+        }
+        else if(boardName === "board4"){
+            player1.setPlayerHitCounter(current => current + 1);
+        }
     }
 
     return (
@@ -44,29 +52,29 @@ export function Battleship(){
             <>
             
             <div>
-                <button className={`${user1Ready && !user2Ready ? styles.readyButton2 : styles.readyButton1}`} onClick={() => handleResetGame()}>Reset</button>
+                <button className={`${player1.playerReady && !player2.playerReady ? styles.readyButton2 : styles.readyButton1}`} onClick={() => handleResetGame()}>Reset</button>
 
                 {started === false ?
                 <div>
                     {
-                        user1Ready === false &&
+                        player1.playerReady === false &&
                         <PlayerSetup
-                            userReadyButtonVisibility={user1ReadyButtonVisibility}
-                            setUserReady={setUser1Ready}
+                            playerReadyButtonVisibility={player1.playerReadyButtonVisibility}
+                            setPlayerReady={player1.setPlayerReady}
                             setBoard={setBoard1}
-                            onSendShipLength={handleSendShipLength1}
+                            onSendShipLength={player1.handleSendShipLength}
                             board={board1}
                             boardName={"board1"}
                         />
                     }
                     
                     {
-                        user1Ready === true &&
+                        player1.playerReady === true &&
                         <PlayerSetup
-                            userReadyButtonVisibility={user2ReadyButtonVisibility}
-                            setUserReady={setUser2Ready}
+                            playerReadyButtonVisibility={player2.playerReadyButtonVisibility}
+                            setPlayerReady={player2.setPlayerReady}
                             setBoard={setBoard2}
-                            onSendShipLength={handleSendShipLength2}
+                            onSendShipLength={player2.handleSendShipLength}
                             board={board2}
                             boardName={"board2"}
                             setStarted={setStarted}
@@ -76,7 +84,7 @@ export function Battleship(){
                 :
                 <div className={styles.divs}>
 
-                    {user2Ready === true &&
+                    {player2.playerReady === true &&
                         <Game
                             counter={counter}
                             setCounter={setCounter}
@@ -86,15 +94,15 @@ export function Battleship(){
                             board4={board4}
                             setBoard3={setBoard3}
                             setBoard4={setBoard4}
-                            onCheckNumberOfHittedShips={handleCheckNumberOfHittedShips}
+                            onSetNumberOfHittedShips={handleSetNumberOfHittedShips}
                         />
                     }
                     {
-                        player2HitCounter === 20 && 
+                        player2.playerHitCounter === 20 && 
                         <WinnerModal 
                             winner={"Player 2 WON!"} 
-                            setPlayer1HitCounter={setPlayer1HitCounter} 
-                            setPlayer2HitCounter={setPlayer2HitCounter}
+                            setPlayer1HitCounter={player1.setPlayerHitCounter} 
+                            setPlayer2HitCounter={player2.setPlayerHitCounter}
                             setBoard3={setBoard3} 
                             setBoard4={setBoard4} 
                             board1={board1} 
@@ -102,11 +110,11 @@ export function Battleship(){
                         />
                     }
                     {
-                        player1HitCounter === 20 && 
+                        player1.playerHitCounter === 20 && 
                         <WinnerModal 
                             winner={"Player 1 WON!"} 
-                            setPlayer1HitCounter={setPlayer1HitCounter} 
-                            setPlayer2HitCounter={setPlayer2HitCounter}
+                            setPlayer1HitCounter={player1.setPlayerHitCounter} 
+                            setPlayer2HitCounter={player2.setPlayerHitCounter}
                             setBoard3={setBoard3} 
                             setBoard4={setBoard4} 
                             board1={board1} 

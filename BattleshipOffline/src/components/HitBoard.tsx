@@ -10,7 +10,7 @@ interface HitBoardProps {
   boardCheck: Cell[][];
   setBoard: React.Dispatch<React.SetStateAction<Cell[][]>>;
   boardName: string;
-  onCheckNumberOfHittedShips: (boardName: string) => void;
+  onSetNumberOfHittedShips: (boardName: string) => void;
   onCount: (number: number) => void;
 }
 
@@ -21,8 +21,8 @@ export default function HitBoard(props:HitBoardProps){
     const handleClick = (row: number, col: number) => {
         
         if(props.boardCheck[row][col].hasShip){
-            props.onCount(2);
-            props.onCheckNumberOfHittedShips(props.boardName);
+            props.onCount(2); //ostaje na potezu isti igrac
+            props.onSetNumberOfHittedShips(props.boardName);
             
             setShips(prevShips =>
                 prevShips.map(ship =>
@@ -47,7 +47,7 @@ export default function HitBoard(props:HitBoardProps){
 
         }
         else{
-            props.onCount(1);
+            props.onCount(1); //na potezu je sledeci igrac
             props.setBoard(prev =>
             prev.map((r, rIdx) =>
                 r.map((c, cIdx) => {
@@ -72,27 +72,22 @@ export default function HitBoard(props:HitBoardProps){
         }
         );
         if(currentShipId != -1){
-            handleHitAround(currentShipId);
+            hitAroundTheShip(props.setBoard, currentShipId);
+            setShips(prevShips =>
+                prevShips.map(ship => {
+                    if(ship.size === ship.hitCounter){
+                        return { ...ship, hitCounter: 0 }
+                    }
+                    return ship;
+                }
+                )
+            );
         }
     }, [checkShipCounter]);
 
-    const handleHitAround = (shipIdDropped: number) => {
-      hitAroundTheShip(props.setBoard, shipIdDropped);
-      setShips(prevShips =>
-          prevShips.map(ship => {
-              if(ship.size === ship.hitCounter){
-                  return { ...ship, hitCounter: 0 }
-              }
-              return ship;
-          }
-          )
-      );
-
-    };
-
     return (
         <div className={styles.boardDiv}>
-            <div className={`${props.boardName === "board3" ? styles.player1 : styles.player2} `}>
+            <div className={`${props.boardName === "board3" ? styles.player1 : styles.player2}`}>
               <b>
                 {props.boardName === "board3" ? "Player 1" : "Player 2"}
               </b>
