@@ -181,3 +181,22 @@
   cursor: pointer;
 }
 
+@keyframes explode {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    background-color: yellow;
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.explosion {
+  animation: explode 0.5s ease-out;
+}

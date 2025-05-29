@@ -105,7 +105,10 @@ export default function HitBoard(props:HitBoardProps){
                 :
                 <div
                     key={`${rowIndex}-${colIndex}`}
-                    className={`${styles.cellHitted} ${styles.draggableCellStyle} ${cell.hasShip ? props.boardName === "board3" ? styles.ship1 : styles.ship2 : ""} ${cell.isHit ? styles.hit : ""}`}
+                    className={`${styles.cellHitted} ${styles.draggableCellStyle} 
+                    ${cell.hasShip ? props.boardName === "board3" ? styles.ship1 : styles.ship2 : ""} 
+                    ${cell.isHit ? styles.hit : ""}
+                    ${cell.hasShip && cell.isHit ? styles.explosion : ""}`}
                 />
                 ))
             )}
