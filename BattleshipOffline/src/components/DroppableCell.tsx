@@ -20,7 +20,7 @@ const DroppableCell: React.FC<DroppableCellProps> = ({
     boardName,
 }) => {
   const [{ isOver }, drop] = useDrop(() => ({
-    accept: "SHIP",
+    accept: "SHIP", //prihavata samo drag elemente koji imaju type:"SHIP"
     drop: (item: Ship & { clickedIndex: number }) => {
         // ➕ Provera da li polja na koje želimo da postavimo brod imaju `hasShip: true`
         const isHorizontal = item.orientation === "horizontal";
@@ -43,7 +43,6 @@ const DroppableCell: React.FC<DroppableCellProps> = ({
     },
     collect: (monitor) => ({
         isOver: monitor.isOver(),
-        canDrop: monitor.canDrop(),
     }),
   }));
 

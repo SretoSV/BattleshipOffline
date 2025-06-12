@@ -128,7 +128,6 @@ export default function Board(props:BoardProps){
                           ships,
                           props.setBoard,
                           setShips,
-                          
                           cell.shipId
                         )
                         setRemove(current => !current);

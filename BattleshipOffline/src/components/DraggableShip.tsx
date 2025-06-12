@@ -34,6 +34,7 @@ export default function DraggableShip({ ship, setShips, boardName }: DraggableSh
 
   return (
     <div
+        data-testid="ship-container"
         ref={(node: HTMLDivElement | null) => {
             if (node) {
                 preview(node);
@@ -49,36 +50,21 @@ export default function DraggableShip({ ship, setShips, boardName }: DraggableSh
         }}
     >
         {Array.from({ length: ship.size }).map((_, idx) => (
-            boardName === "board1" ? 
             <div
               key={idx}
+              data-testid="ship-part"
+              data-active={idx === clickedIndex}
               ref={(node) => {
                   if (idx === clickedIndex && node) {
-                  drag(node);
+                    drag(node);
                   }
               }}
               onMouseDown={() => setClickedIndex(idx)}
               style={{
                   width: 41,
                   height: 41,
-                  backgroundColor: "#2488cf",
+                  backgroundColor: boardName === "board1" ? "#2488cf" : "red",
                   /*backgroundImage: `url(${play1Image})`,*/
-                  border: "1px solid black",
-              }}
-            />
-            :
-            <div
-              key={idx}
-              ref={(node) => {
-                  if (idx === clickedIndex && node) {
-                  drag(node);
-                  }
-              }}
-              onMouseDown={() => setClickedIndex(idx)}
-              style={{
-                  width: 41,
-                  height: 41,
-                  backgroundColor: "red",
                   border: "1px solid black",
               }}
             />
