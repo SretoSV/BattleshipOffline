@@ -55,7 +55,7 @@ const DroppableCell: React.FC<DroppableCellProps> = ({
             width: 42,
             height: 42,
             border: "2px solid #1b4f74",
-            backgroundColor: isOver ? boardName === "board1" ? "#2488cf" : "red" : "#EFEFEF",
+            backgroundColor: isOver ? boardName === "board1" ? "#2488cf" : "#ff0000" : "#EFEFEF",
         }}
     >
         {children}
