@@ -134,14 +134,16 @@ export default function Board(props:BoardProps){
                       }
                       }
                       title="Click To Remove"
+                      data-testid="clickable-cell"
                     /> 
                       :
-                      cell.shipNextTo ? 
-                      <div
+                    cell.shipNextTo ? 
+                    <div
                       key={`${rowIndex}-${colIndex}`}
                       className={`${styles.cell} ${cell.shipNextTo ? styles.next : ""} `}
+                      data-testid="non-clickable-cell"
                     /> :
-                    <div></div>
+                    <div data-testid="non-clickable-cell"></div>
                     }
                 </DroppableCell>
           ))

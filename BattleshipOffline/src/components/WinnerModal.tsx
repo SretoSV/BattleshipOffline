@@ -24,8 +24,8 @@ export function WinnerModal({winner, setPlayer1HitCounter, setPlayer2HitCounter,
     return (
         <div className={styles.modalOverlay}>
             <div className={`${styles.modal} ${winner === "Player 2 WON!" ? styles.modalBack2 : styles.modalBack1}`}>
-            <h2>{winner}</h2>
-            <button className={winner === "Player 2 WON!" ? styles.readyButton2 : styles.readyButton1} onClick={closeModal}>Close</button>
+                <h2>{winner}</h2>
+                <button className={winner === "Player 2 WON!" ? styles.readyButton2 : styles.readyButton1} onClick={closeModal}>Close</button>
             </div>
         </div>
     )

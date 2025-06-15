@@ -101,6 +101,7 @@ export default function HitBoard(props:HitBoardProps){
                     key={`${rowIndex}-${colIndex}`}
                     className={`${styles.cell} ${styles.draggableCellStyle} ${cell.hasShip ? props.boardName === "board3" ? styles.ship1 : styles.ship2 : ""} ${cell.isHit ? styles.hit : ""}`}
                     onClick={() => handleClick?.(rowIndex, colIndex)}
+                    data-testid="clickable-cell"
                 />
                 :
                 <div
@@ -109,6 +110,7 @@ export default function HitBoard(props:HitBoardProps){
                     ${cell.hasShip ? props.boardName === "board3" ? styles.ship1 : styles.ship2 : ""} 
                     ${cell.isHit ? styles.hit : ""}
                     ${cell.hasShip && cell.isHit ? styles.explosion : ""}`}
+                    data-testid="non-clickable-cell"
                 />
                 ))
             )}
