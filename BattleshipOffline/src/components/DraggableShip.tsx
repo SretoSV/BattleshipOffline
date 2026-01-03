@@ -1,6 +1,7 @@
 import { useDrag } from "react-dnd";
 import type { Ship } from "../types/ShipTypes";
 import { useState, type Dispatch, type SetStateAction } from "react";
+import styles from '../styles/BattleshipStyle.module.css';
 
 interface DraggableShipProps {
   ship: Ship;
@@ -60,13 +61,13 @@ export default function DraggableShip({ ship, setShips, boardName }: DraggableSh
                   }
               }}
               onMouseDown={() => setClickedIndex(idx)}
-              style={{
-                  width: 41,
-                  height: 41,
-                  backgroundColor: boardName === "board1" ? "#2488cf" : "red",
-                  /*backgroundImage: `url(${play1Image})`,*/
-                  border: "1px solid black",
-              }}
+              className={[
+                styles.shipPart,
+                boardName === "board1" && styles.shipBoard1,
+                boardName !== "board1" && styles.shipBoard2,
+              ]
+                .filter(Boolean)
+                .join(" ")}
             />
         ))}
     </div>

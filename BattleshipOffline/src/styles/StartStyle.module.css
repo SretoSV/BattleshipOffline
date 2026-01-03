@@ -17,6 +17,7 @@
     color: white;
     padding: 5px 20px;
     border-radius: 40px;
+    cursor: pointer;
 }
 
 .playButton:hover{
@@ -26,4 +27,74 @@
 
 .vsImage{
     width: 100px;
+}
+
+@media (max-width: 1000px) {
+    .playButton{
+        font-size: 90px;
+    }
+    .playButton:hover{
+        font-size: 110px;
+    }
+    .shipsImages{
+        width: 300px;
+        height: 400px;
+    }
+    .vsImage{
+        width: 80px;
+    }
+}
+
+@media (max-width: 700px) {
+    .playButton{
+        font-size: 80px;
+    }
+    .playButton:hover{
+        font-size: 100px;
+    }
+    .shipsImages{
+        width: 250px;
+        height: 350px;
+    }
+    .vsImage{
+        width: 60px;
+    }
+}
+
+@media (max-width: 600px) {
+    .playButton{
+        font-size: 60px;
+    }
+    .playButton:hover{
+        font-size: 80px;
+    }
+    .shipsImages{
+        width: 200px;
+        height: 300px;
+    }
+    .vsImage{
+        width: 50px;
+    }
+}
+
+@media (max-width: 450px) {
+    .shipsDiv{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .playButton{
+        font-size: 40px;
+    }
+    .playButton:hover{
+        font-size: 50px;
+    }
+    .shipsImages{
+        width: 150px;
+        height: 180px;
+    }
+    .vsImage{
+        width: 50px;
+    }
 }

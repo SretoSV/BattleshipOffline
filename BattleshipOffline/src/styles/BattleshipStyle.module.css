@@ -118,12 +118,18 @@
   align-items: center;
 }
 
-.countImage{
-    width: 60px;
-    height: 70px;
-    margin-right: -15px;
-    margin-left: 5px;
+.arrowImage{
+  width: 60px;
+  height: 70px;
+  margin-right: -15px;
+  margin-left: 5px;
+  content: url("../images/play1.png");
 }
+
+.arrowImage.player2 {
+  content: url("../images/play2.png");
+}
+
 
 .player1{
   font-size: 50px;
@@ -199,4 +205,134 @@
 
 .explosion {
   animation: explode 0.5s ease-out;
+}
+
+.droppableCell {
+  width: 42px;
+  height: 42px;
+  border: 2px solid #1b4f74;
+  background-color: #EFEFEF;
+}
+
+.cellOverBoard1 {
+  background-color: #2488cf;
+}
+
+.cellOverBoard2 {
+  background-color: #ff0000;
+}
+
+.shipPart {
+  width: 41px;
+  height: 41px;
+  border: 1px solid black;
+}
+
+.shipBoard1 {
+  background-color: #2488cf;
+}
+
+.shipBoard2 {
+  background-color: red;
+}
+
+/*---------------------------- MEDIA ----------------------------*/
+@media (max-width: 1000px) {
+  .h1{
+    font-size: 80px;
+  }
+}
+
+@media (max-width: 950px) {
+  .board3And4Div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .arrowImage{
+    width: 70px;
+    height: 60px;
+    content: url("../images/play1a.png");
+  }
+  .arrowImage.player2 {
+    content: url("../images/play2a.png");
+  }
+}
+
+@media (max-width: 800px) {
+  .player1, .player2{
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 700px) {
+  .h1{
+    font-size: 60px;
+  }
+  .rulesDiv1, .rulesDiv2{
+    font-size: 18px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 650px) {
+  .board {
+    display: grid;
+    grid-template-columns: repeat(10, 32px);
+    grid-template-rows: repeat(10, 32px);
+  }
+  .cell {
+    width: 30px;
+    height: 30px;
+    background-color: #bad9e2;
+    border: 1px solid #aaa;
+    cursor: pointer;
+  }
+  .cellHitted {
+    width: 30px;
+    height: 30px;
+    background-color: #bad9e2;
+    border: 1px solid #aaa;
+  }
+  .player1, .player2{
+    font-size: 30px;
+  }
+  .rulesDiv1, .rulesDiv2{
+    font-size: 18px;
+    padding: 10px;
+    width: 500px;
+  }
+  .droppableCell {
+    width: 30px;
+    height: 30px;
+  }
+  .shipPart {
+    width: 29px;
+    height: 29px;
+  }
+  .draggableCellStyle{
+    width: 30;
+    height: 30;
+    border: 2px solid #1b4f74;
+    background-color: "#EFEFEF";
+  }
+  .arrowImage{
+    width: 60px;
+    height: 50px;
+    content: url("../images/play1a.png");
+  }
+}
+
+@media (max-width: 600px) {
+  .h1{
+    font-size: 50px;
+  }
+}
+
+@media (max-width: 550px) {
+  .rulesDiv1, .rulesDiv2{
+    font-size: 18px;
+    padding: 10px;
+    width: 400px;
+  }
 }

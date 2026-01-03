@@ -14,18 +14,15 @@ export default function Start(props: startProps){
             <div className={styles.shipsDiv}>
                 <img
                     src={ship1}
-                    alt="Send"
                     className={styles.shipsImages}
                 /> 
                 <img
                     src={vs}
-                    alt="Send"
                     className={styles.vsImage}
                 /> 
                 <img
                     src={ship2}
-                    alt="Send"
-                    className={styles.countImage}
+                    className={styles.shipsImages}
                 /> 
             </div>
             <button onClick={() => props.onPlay()} className={styles.playButton}>Play</button>

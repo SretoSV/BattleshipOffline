@@ -1,6 +1,7 @@
 import { useDrop } from "react-dnd";
 import type { Ship } from "../types/ShipTypes";
 import type { Cell } from "../types/CellTypes";
+import styles from '../styles/BattleshipStyle.module.css';
 
 interface DroppableCellProps {
     row: number;
@@ -51,12 +52,13 @@ const DroppableCell: React.FC<DroppableCellProps> = ({
         ref={(node: HTMLDivElement | null) => {
             if (node) drop(node);
         }}
-        style={{
-            width: 42,
-            height: 42,
-            border: "2px solid #1b4f74",
-            backgroundColor: isOver ? boardName === "board1" ? "#2488cf" : "#ff0000" : "#EFEFEF",
-        }}
+        className={[
+            styles.droppableCell,
+            isOver && boardName === "board1" && styles.cellOverBoard1,
+            isOver && boardName !== "board1" && styles.cellOverBoard2,
+        ]
+            .filter(Boolean)
+            .join(" ")}
     >
         {children}
     </div>

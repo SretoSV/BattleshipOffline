@@ -1,8 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import styles from '../styles/BattleshipStyle.module.css';
 import HitBoard from './HitBoard';
-import play1 from '../images/play1.png';
-import play2 from '../images/play2.png';
 import type { Cell } from '../types/CellTypes';
 
 interface GameProps{
@@ -32,9 +30,13 @@ export function Game({counter, setCounter, board1, board2, board3, board4, setBo
         </div>
 
         <img
-            src={counter % 2 === 0 ? play1 : play2}
-            alt="Send"
-            className={styles.countImage}
+            alt="arrow"
+            className={[
+                styles.arrowImage,
+                counter % 2 !== 0 && styles.player2,
+            ]
+                .filter(Boolean)
+                .join(" ")}
         /> 
         
         <div style={{ pointerEvents: counter % 2 !== 0 ? 'none' : 'auto' }}>
