@@ -6,6 +6,7 @@ import DroppableCell from "../components/DroppableCell";
 import type { Cell } from "../types/CellTypes";
 import type { Ship } from "../types/ShipTypes";
 import { useDrop } from "react-dnd";
+import styles from '../styles/BattleshipStyle.module.css';
 
 vi.mock("react-dnd", async () => {
   const actual = await vi.importActual<any>("react-dnd");
@@ -53,28 +54,9 @@ describe("DroppableCell", () => {
         );
 
         const cell = container.firstChild as HTMLElement;
-        expect(cell).toHaveStyle("background-color: #EFEFEF");
-        expect(cell).toHaveStyle("border: 2px solid #1b4f74");
-    });
-
-    it("renders with blue background when isOver is true and boardName is board1", () => {
-        (useDrop as unknown as ReturnType<typeof vi.fn>).mockReturnValueOnce([
-        { isOver: true },
-        mockDrop,
-        ]);
-
-        const { container } = renderWithDnd(
-        <DroppableCell
-            row={0}
-            col={0}
-            onDropShip={mockOnDropShip}
-            board={board}
-            boardName="board1"
-        />
-        );
-
-        const cell = container.firstChild as HTMLElement;
-        expect(cell).toHaveStyle("background-color: #2488cf");
+        expect(cell).toHaveClass(styles.droppableCell);
+        expect(cell).not.toHaveClass(styles.cellOverBoard1);
+        expect(cell).not.toHaveClass(styles.cellOverBoard2);
     });
 
     it("renders with blue background when isOver is true and boardName is board1", () => {
@@ -94,7 +76,9 @@ describe("DroppableCell", () => {
         );
 
         const cell = container.firstChild as HTMLElement;
-        expect(cell).toHaveStyle("background-color: #2488cf");
+        expect(cell).toHaveClass(styles.droppableCell);
+        expect(cell).toHaveClass(styles.cellOverBoard1);
+        expect(cell).not.toHaveClass(styles.cellOverBoard2);
     });
 
     it("renders with red background when isOver is true and boardName is board2", () => {
@@ -114,7 +98,9 @@ describe("DroppableCell", () => {
         );
 
         const cell = container.firstChild as HTMLElement;
-        expect(cell).toHaveStyle("background-color: #ff0000");
+        expect(cell).toHaveClass(styles.droppableCell);
+        expect(cell).toHaveClass(styles.cellOverBoard2);
+        expect(cell).not.toHaveClass(styles.cellOverBoard1);
     });
 
     it("calls onDropShip when drop is valid (horizontal, no overlap, in bounds)", () => {

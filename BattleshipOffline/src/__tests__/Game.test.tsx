@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { Game } from "../components/Game";
 import { vi } from "vitest";
 import type { Cell } from "../types/CellTypes";
+import styles from '../styles/BattleshipStyle.module.css';
 
 //Mockujemo sliku - mora da se vrati kao default jer Webpack/Vite slike ucitavaju kao "default export"
 vi.mock("../images/play1.png", () => ({ default: "play1.png" }));
@@ -68,7 +69,7 @@ describe("Game component", () => {
         );
 
         const img = screen.getByRole("img");
-        expect(img).toHaveAttribute("src", "play1.png");
+        expect(img).toHaveClass(styles.arrowImage);
     });
 
     it("displays play2 image when counter is odd", () => {
@@ -87,7 +88,8 @@ describe("Game component", () => {
         );
 
         const img = screen.getByRole("img");
-        expect(img).toHaveAttribute("src", "play2.png");
+        expect(img).toHaveClass(styles.arrowImage);
+        expect(img).toHaveClass(styles.player2);
     });
 
     it("calls onCount and onSetNumberOfHittedShips when HitBoard is clicked", () => {
